@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Name — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+  /* ===================== TOKENS ===================== */
+  :root{
+    --bg:        #F7F6F2;   /* paper */
+    --bg-alt:    #ECE9E1;   /* slightly deeper, for alternating bands */
+    --card:      #FFFFFF;
+    --ink:       #16160F;   /* near-black, warm */
+    --ink-muted: #6E6B61;
+    --accent:    #335CFF;   /* cobalt — the one accent color */
+    --line:      #DAD6CB;
+
+    --display: 'Fraunces', serif;
+    --body:    'Inter', system-ui, sans-serif;
+    --mono:    'JetBrains Mono', monospace;
+
+    --maxw: 1080px;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
+  }
+
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--body);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .wrap{ max-width:var(--maxw); margin:0 auto; padding:0 28px; }
+
+  a{ color:inherit; text-decoration:none; }
+
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12.5px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--ink-muted);
+  }
+
+  /* ===================== NAV ===================== */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    background:transparent;
+    transition:background .25s ease, border-color .25s ease;
+    border-bottom:1px solid transparent;
+  }
+  header.scrolled{
+    background:rgba(247,246,242,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 28px;
+    max-width:var(--maxw); margin:0 auto;
+  }
+  .nav-name{
+    font-family:var(--display);
+    font-weight:600;
+    font-size:18px;
+  }
+  .nav-links{ display:flex; gap:28px; }
+  .nav-links a{
+    font-family:var(--mono);
+    font-size:13px;
+    letter-spacing:0.02em;
+    color:var(--ink-muted);
+    transition:color .15s;
+  }
+  .nav-links a:hover{ color:var(--accent); }
+  .nav-toggle{ display:none; background:none; border:none; cursor:pointer; }
+
+  @media (max-width:680px){
+    .nav-links{
+      position:absolute; top:100%; left:0; right:0;
+      background:var(--bg); border-bottom:1px solid var(--line);
+      flex-direction:column; gap:0; padding:8px 0;
+      transform-origin:top; transform:scaleY(0); opacity:0;
+      transition:transform .18s ease, opacity .18s ease;
+    }
+    .nav-links.open{ transform:scaleY(1); opacity:1; }
+    .nav-links a{ padding:14px 28px; border-top:1px solid var(--line); }
+    .nav-toggle{ display:block; }
+  }
+
+  /* ===================== HERO ===================== */
+  .hero{
+    min-height:92vh;
+    display:flex; flex-direction:column; justify-content:center;
+    padding-top:120px; padding-bottom:60px;
+  }
+  .hero h1{
+    font-family:var(--display);
+    font-weight:600;
+    font-size:clamp(44px, 8vw, 92px);
+    line-height:1.02;
+    letter-spacing:-0.01em;
+    max-width:14ch;
+  }
+  .hero .role-line{
+    margin-top:22px;
+    font-size:clamp(16px,2vw,20px);
+    color:var(--ink-muted);
+    max-width:46ch;
+  }
+  .hero .role-line strong{ color:var(--ink); font-weight:600; }
+  .scroll-cue{
+    margin-top:64px;
+    display:flex; align-items:center; gap:10px;
+    font-family:var(--mono); font-size:12px; color:var(--ink-muted);
+  }
+  .scroll-cue .dot{
+    width:6px; height:6px; border-radius:50%; background:var(--accent);
+    animation:pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse{ 0%,100%{opacity:.3;} 50%{opacity:1;} }
+
+  /* ===================== FACET SELECTOR ===================== */
+  /* This is the signature element: the visitor literally chooses
+     which "version" of you they want to see, and the about blurb +
+     project grid below reflow to match. Encodes the brief — one
+     person, several facets — instead of decorating it. */
+
+  .facets{
+    display:flex; flex-wrap:wrap; gap:10px;
+    margin-top:36px;
+  }
+  .facet-pill{
+    font-family:var(--mono);
+    font-size:13px;
+    padding:9px 18px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    background:var(--card);
+    color:var(--ink-muted);
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .facet-pill:hover{ border-color:var(--accent); color:var(--ink); }
+  .facet-pill.active{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:#fff;
+  }
+
+  /* ===================== SECTION SHELL ===================== */
+  section{ padding:90px 0; }
+  .band{ background:var(--bg-alt); }
+  .section-head{
+    display:flex; align-items:baseline; justify-content:space-between;
+    margin-bottom:48px; gap:24px; flex-wrap:wrap;
+  }
+  .section-head h2{
+    font-family:var(--display);
+    font-weight:600;
+    font-size:clamp(28px,4vw,40px);
+  }
+
+  /* ===================== ABOUT ===================== */
+  .about-grid{
+    display:grid; grid-template-columns:1fr 1.4fr; gap:56px;
+  }
+  .about-grid p{ font-size:17px; color:var(--ink-muted); }
+  .about-grid p + p{ margin-top:16px; }
+  #facet-blurb{ color:var(--ink); font-size:18px; }
+  .now-list{ margin-top:20px; display:flex; flex-direction:column; gap:10px; }
+  .now-list li{ list-style:none; font-size:14px; color:var(--ink-muted); display:flex; gap:10px; }
+  .now-list li::before{ content:"—"; color:var(--accent); }
+
+  @media (max-width:780px){
+    .about-grid{ grid-template-columns:1fr; gap:32px; }
+  }
+
+  /* ===================== WORK GRID ===================== */
+  .grid{
+    display:grid; grid-template-columns:repeat(2,1fr); gap:28px;
+  }
+  @media (max-width:780px){ .grid{ grid-template-columns:1fr; } }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:10px;
+    overflow:hidden;
+    transition:transform .18s ease, box-shadow .18s ease;
+    display:flex; flex-direction:column;
+  }
+  .card:hover{ transform:translateY(-3px); box-shadow:0 12px 24px -16px rgba(0,0,0,.25); }
+  .card.hidden{ display:none; }
+
+  .card-media{
+    aspect-ratio:16/10;
+    background:
+      repeating-linear-gradient(45deg, var(--bg-alt) 0 10px, var(--bg) 10px 20px);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono); font-size:12px; color:var(--ink-muted);
+  }
+  .card-body{ padding:22px; }
+  .card-tags{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+  .card-tag{
+    font-family:var(--mono); font-size:11px; letter-spacing:.03em;
+    color:var(--accent); text-transform:uppercase;
+  }
+  .card h3{ font-family:var(--display); font-weight:600; font-size:21px; margin-bottom:8px; }
+  .card p{ font-size:14.5px; color:var(--ink-muted); }
+  .card-link{
+    margin-top:14px; display:inline-flex; align-items:center; gap:6px;
+    font-family:var(--mono); font-size:12.5px; color:var(--ink);
+  }
+  .card-link span{ transition:transform .15s; }
+  .card:hover .card-link span{ transform:translateX(3px); }
+
+  /* ===================== CONTACT ===================== */
+  .contact-row{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    flex-wrap:wrap; gap:32px;
+  }
+  .contact-row h2{
+    font-family:var(--display); font-weight:600;
+    font-size:clamp(32px,5vw,52px); max-width:16ch;
+  }
+  .contact-links{ display:flex; flex-direction:column; gap:6px; align-items:flex-end; }
+  .contact-links a{
+    font-family:var(--mono); font-size:14px; color:var(--ink-muted);
+    transition:color .15s;
+  }
+  .contact-links a:hover{ color:var(--accent); }
+  @media (max-width:680px){ .contact-links{ align-items:flex-start; } }
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:28px 0;
+    font-family:var(--mono); font-size:12px; color:var(--ink-muted);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  }
+
+</style>
+</head>
+<body>
+
+  <!-- ===================== NAV ===================== -->
+  <header id="site-header">
+    <nav>
+      <a href="#top" class="nav-name">Your Name</a>
+      <div class="nav-links" id="nav-links">
+        <a href="#about">About</a>
+        <a href="#work">Work</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M2 5h16M2 10h16M2 15h16" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+    </nav>
+  </header>
+
+  <!-- ===================== HERO ===================== -->
+  <div id="top" class="wrap hero">
+    <p class="eyebrow">Portfolio — 2026</p>
+    <h1>Your Name.</h1>
+    <p class="role-line">
+      I'm a <strong id="hero-role">builder, writer, and occasional troublemaker</strong> —
+      replace this line with one sentence that actually describes you.
+    </p>
+
+    <!-- FACET SELECTOR: edit the labels + data-blurb to match your real facets -->
+    <div class="facets" id="facets">
+      <button class="facet-pill active" data-facet="all" data-blurb="This is the default view — a short, honest paragraph about who you are across everything you do. Two to three sentences is plenty.">All</button>
+      <button class="facet-pill" data-facet="engineer" data-blurb="As an engineer, I [replace with what you build, tools you use, and the kind of problems you like solving].">Engineer</button>
+      <button class="facet-pill" data-facet="designer" data-blurb="As a designer, I [replace with your design focus — product, visual, brand, etc].">Designer</button>
+      <button class="facet-pill" data-facet="writer" data-blurb="As a writer, I [replace with what you write about and where it's published].">Writer</button>
+    </div>
+
+    <div class="scroll-cue"><span class="dot"></span> Scroll to see what each facet means</div>
+  </div>
+
+  <!-- ===================== ABOUT ===================== -->
+  <section id="about">
+    <div class="wrap about-grid">
+      <div>
+        <p class="eyebrow">About</p>
+      </div>
+      <div>
+        <p id="facet-blurb">This is the default view — a short, honest paragraph about who you are across everything you do. Two to three sentences is plenty.</p>
+        <p style="margin-top:24px;">Use this second paragraph for a bit more depth: how you got here, what you care about, or a small personal detail. Keep it conversational — this section should sound like you, not a resume.</p>
+
+        <ul class="now-list">
+          <li>Currently — [what you're working on right now]</li>
+          <li>Based in — [city / remote]</li>
+          <li>Previously — [one notable past role or project]</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== WORK ===================== -->
+  <section id="work" class="band">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Selected work</h2>
+        <p class="eyebrow">Filtered by the facet you picked above</p>
+      </div>
+
+      <div class="grid" id="work-grid">
+
+        <!-- Duplicate this card block for each project. data-facet must match a pill's data-facet -->
+        <div class="card" data-facet="engineer">
+          <div class="card-media">[ project image / screenshot ]</div>
+          <div class="card-body">
+            <div class="card-tags"><span class="card-tag">Engineer</span></div>
+            <h3>Project Name</h3>
+            <p>One or two sentences on what this is, what you built, and the impact or outcome.</p>
+            <a class="card-link" href="#">View project <span>→</span></a>
+          </div>
+        </div>
+
+        <div class="card" data-facet="designer">
+          <div class="card-media">[ project image / screenshot ]</div>
+          <div class="card-body">
+            <div class="card-tags"><span class="card-tag">Designer</span></div>
+            <h3>Project Name</h3>
+            <p>One or two sentences on what this is, what you built, and the impact or outcome.</p>
+            <a class="card-link" href="#">View project <span>→</span></a>
+          </div>
+        </div>
+
+        <div class="card" data-facet="writer">
+          <div class="card-media">[ project image / screenshot ]</div>
+          <div class="card-body">
+            <div class="card-tags"><span class="card-tag">Writer</span></div>
+            <h3>Piece Title</h3>
+            <p>One or two sentences on what this piece is about and where it ran.</p>
+            <a class="card-link" href="#">Read it <span>→</span></a>
+          </div>
+        </div>
+
+        <div class="card" data-facet="engineer">
+          <div class="card-media">[ project image / screenshot ]</div>
+          <div class="card-body">
+            <div class="card-tags"><span class="card-tag">Engineer</span></div>
+            <h3>Project Name</h3>
+            <p>One or two sentences on what this is, what you built, and the impact or outcome.</p>
+            <a class="card-link" href="#">View project <span>→</span></a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONTACT ===================== -->
+  <section id="contact">
+    <div class="wrap contact-row">
+      <h2>Let's talk about something interesting.</h2>
+      <div class="contact-links">
+        <a href="mailto:you@example.com">you@example.com</a>
+        <a href="#">GitHub</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Twitter / X</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="wrap">
+    <span>© 2026 Your Name</span>
+    <span>Built with care, structured by Claude</span>
+  </footer>
+
+  <script>
+    // Nav background on scroll
+    const header = document.getElementById('site-header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 10);
+    });
+
+    // Mobile nav toggle
+    const navToggle = document.getElementById('nav-toggle');
+    const navLinks = document.getElementById('nav-links');
+    navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+    navLinks.querySelectorAll('a').forEach(a =>
+      a.addEventListener('click', () => navLinks.classList.remove('open'))
+    );
+
+    // Facet selector: swaps the about blurb + filters the work grid
+    const pills = document.querySelectorAll('.facet-pill');
+    const blurb = document.getElementById('facet-blurb');
+    const cards = document.querySelectorAll('#work-grid .card');
+
+    pills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        pills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+
+        blurb.textContent = pill.dataset.blurb;
+
+        const facet = pill.dataset.facet;
+        cards.forEach(card => {
+          const show = facet === 'all' || card.dataset.facet === facet;
+          card.classList.toggle('hidden', !show);
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
