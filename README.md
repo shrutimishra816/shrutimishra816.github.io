@@ -1,8 +1,8 @@
-# Your Name — Portfolio
+# Shruti Mishra — Portfolio
 
 A single-page personal portfolio. No build step, no dependencies beyond Google Fonts — it's plain HTML, CSS, and JavaScript in `index.html`.
 
-**Live site:** https://your-username.github.io
+**Live site:** https://shrutimishra816.github.io
 
 ## What's in here
 
@@ -19,10 +19,10 @@ The pills under the hero ("All / Engineer / Designer / Writer") let a visitor pi
 
 Anything in `[brackets]` is a placeholder. The main spots:
 
-- Hero: name, role line
+- Hero: Shruti Mishra, MCA Graduate(Fresher)
 - About: bio paragraph, "Currently / Based in / Previously" list
 - Work: one card per project — duplicate the `<div class="card">` block for more
-- Contact: email and social links
+- Contact: shrutimishra816@gmail.com
 
 Edit directly on GitHub (pencil icon on the file → commit) or clone the repo and edit locally — either way, pushing to `main` updates the live site automatically within about a minute.
 
