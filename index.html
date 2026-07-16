@@ -195,6 +195,41 @@
     align-items:flex-start;
     min-height:120px;
   }
+  .card.card-active{
+    text-decoration:none;
+    border-color:var(--accent);
+    box-shadow:0 1px 0 var(--accent);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .card.card-active:hover{
+    transform:translateY(-2px);
+    box-shadow:0 6px 16px -8px var(--accent);
+  }
+  .meta-live{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    color:var(--accent);
+  }
+  .pulse-dot{
+    width:7px; height:7px;
+    border-radius:50%;
+    background:var(--accent);
+    position:relative;
+  }
+  .pulse-dot::after{
+    content:"";
+    position:absolute;
+    inset:-4px;
+    border-radius:50%;
+    background:var(--accent);
+    opacity:.5;
+    animation:pulse 1.8s ease-out infinite;
+  }
+  @keyframes pulse{
+    0%{ transform:scale(.6); opacity:.6; }
+    100%{ transform:scale(2.2); opacity:0; }
+  }
   .card h3{
     font-family:'Space Grotesk', sans-serif;
     font-size:17px;
@@ -332,11 +367,12 @@
       <span class="section-tag">// building now</span>
     </div>
     <div class="grid">
-      <div class="card placeholder">
-        <span class="meta">Planned</span>
+      <a class="card card-active" href="projects/sales-dashboard.html">
+        <span class="meta meta-live"><span class="pulse-dot"></span>In Progress</span>
         <h3>Sales / Business Performance Dashboard</h3>
-        <p>Revenue trends, top products/regions, and YoY comparison built in Power BI or Excel.</p>
-      </div>
+        <p>Revenue trends, regional performance, and profit-vs-discount analysis — built in Power BI and Excel from the Superstore dataset.</p>
+        <span class="link">View project log →</span>
+      </a>
       <div class="card placeholder">
         <span class="meta">Planned</span>
         <h3>Automated Report Generator</h3>
