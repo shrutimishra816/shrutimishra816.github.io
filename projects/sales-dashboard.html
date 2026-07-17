@@ -178,18 +178,50 @@
     <h2 class="section-title">Data Source</h2>
     <p><strong>Dataset:</strong> Sample Superstore (public, Kaggle) — 9,994 rows, 13 columns: Ship Mode, Segment,
       Country, City, State, Postal Code, Region, Category, Sub-Category, Sales, Quantity, Discount, Profit.</p>
-    <p><strong>QA findings:</strong> 0 null values across all columns. Postal Code flagged and cast to text (not
-      numeric) to prevent aggregation errors. Negative profit rows confirmed as valid — not data errors — and kept
-      in for discount analysis.</p>
+    <p><strong>QA findings:</strong> See Data Integrity Check below for the full audit — duplicates found and flagged,
+      types corrected, and value ranges verified before building any visuals.</p>
+  </section>
+
+  <section>
+    <h2 class="section-title">Data Integrity Check</h2>
+    <p style="margin-bottom:18px;">A validation pass run on the raw file before any visual was built — every check
+      below was actually executed against the dataset, not assumed.</p>
+    <table class="ledger">
+      <tr>
+        <td class="status"><span class="tag">Removed</span></td>
+        <td class="entry"><strong>Duplicate rows:</strong> 17 exact duplicate rows found out of 9,994 (0.17%) — removed via Power Query, confirmed at 9,977 rows post-cleaning.</td>
+      </tr>
+      <tr>
+        <td class="status"><span class="tag">Pass</span></td>
+        <td class="entry"><strong>Missing values:</strong> 0 nulls across all 13 columns.</td>
+      </tr>
+      <tr>
+        <td class="status"><span class="tag">Corrected</span></td>
+        <td class="entry"><strong>Data types:</strong> Postal Code was stored as a number — cast to text to prevent it being summed/averaged by mistake.</td>
+      </tr>
+      <tr>
+        <td class="status"><span class="tag">Pass</span></td>
+        <td class="entry"><strong>Value ranges:</strong> Sales $0.44–$22,638.48, Discount 0–80%, Quantity 1–14 — all within plausible bounds, no negative sales or impossible values.</td>
+      </tr>
+      <tr>
+        <td class="status"><span class="tag">Verified</span></td>
+        <td class="entry"><strong>Negative profit rows:</strong> 1,871 rows (18.72%) show a loss. Confirmed as genuine — driven by high discounts, not data errors — and kept in for the Profit vs. Discount analysis rather than dropped.</td>
+      </tr>
+      <tr>
+        <td class="status"><span class="tag">Pass</span></td>
+        <td class="entry"><strong>Category consistency:</strong> Region (4), Category (3), Segment (3), and Ship Mode (4) values are clean and consistently spelled — no case mismatches or stray variants.</td>
+      </tr>
+    </table>
   </section>
 
   <section>
     <h2 class="section-title">Headline Numbers</h2>
+    <p style="margin-bottom:18px;">Deduplicated figures — 9,977 rows after removing the 17 exact duplicate rows.</p>
     <div class="kpi-grid">
-      <div class="kpi"><div class="label">Total Sales</div><div class="value">$2,297,200.86</div></div>
-      <div class="kpi"><div class="label">Total Profit</div><div class="value">$286,397.02</div></div>
+      <div class="kpi"><div class="label">Total Sales</div><div class="value">$2,296,195.59</div></div>
+      <div class="kpi"><div class="label">Total Profit</div><div class="value">$286,241.42</div></div>
       <div class="kpi"><div class="label">Profit Margin</div><div class="value">12.47%</div></div>
-      <div class="kpi"><div class="label">Total Orders</div><div class="value">9,994</div></div>
+      <div class="kpi"><div class="label">Total Orders</div><div class="value">9,977</div></div>
     </div>
   </section>
 
@@ -210,12 +242,12 @@
       <tr>
         <td class="date">2026-07-16</td>
         <td class="status"><span class="tag">Sourced</span></td>
-        <td class="entry">Dataset sourced from Kaggle and QA'd — 9,994 rows, 0 nulls, types verified.</td>
+        <td class="entry">Dataset sourced from Kaggle and QA'd — 9,994 rows, 17 duplicates removed via Power Query (9,977 final), 0 nulls, Postal Code type corrected.</td>
       </tr>
       <tr>
-        <td class="date">—</td>
-        <td class="status"><span class="tag">Pending</span></td>
-        <td class="entry">KPI cards — Total Sales, Total Profit, Profit Margin %, Total Orders.</td>
+        <td class="date">2026-07-17</td>
+        <td class="status"><span class="tag">Done</span></td>
+        <td class="entry">KPI cards built in Power BI — Total Sales, Total Profit, Total Orders, Profit Margin % via Measures table and DAX.</td>
       </tr>
       <tr>
         <td class="date">—</td>
@@ -249,8 +281,8 @@
     <h2 class="section-title">Documentation</h2>
     <p>Full methodology and insights are tracked in Confluence; task breakdown lives in Jira.</p>
     <div class="doc-links">
+      <a class="doc-link" href="https://shrutimishra816-1784147395834.atlassian.net/wiki/spaces/~6363f01cfc0cc7a600b0ddab/pages/524289/Sales+Business+Performance+Dashboard" target="_blank" rel="noopener">Confluence Doc →</a>
       <span class="doc-link disabled">Jira Board — SPD (coming soon)</span>
-      <span class="doc-link disabled">Confluence Doc (coming soon)</span>
     </div>
   </section>
 
